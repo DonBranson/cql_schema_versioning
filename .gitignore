@@ -1,0 +1,8 @@
+target/
+.idea/
+*.iml
+.settings
+.classpath
+.project
+*__
+*.swp
