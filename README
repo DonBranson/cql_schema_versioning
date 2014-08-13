@@ -1,0 +1,5 @@
+This is a quick example that I through together very quickly, so beware. 
+
+Build using: mvn clean install
+
+Then see cql-schema-versioning-example to see how it can be used.
