@@ -8,6 +8,4 @@
     <context:property-placeholder ignore-unresolvable="true" location="classpath*:default.properties, classpath*:${runtime.environment}.properties" />
     <context:annotation-config/>
     <context:component-scan base-package="org.makeyourcase" use-default-filters="true" />
-
-    <aop:aspectj-autoproxy/>
 </beans>
