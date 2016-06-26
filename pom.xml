@@ -3,7 +3,7 @@
     <groupId>org.makeyourcase</groupId>
     <artifactId>cql-schema-versioning</artifactId>
     <packaging>jar</packaging>
-    <version>1.3</version>
+    <version>1.4-SNAPSHOT</version>
     <name>cql schema versioning</name>
 
     <properties>
@@ -25,7 +25,7 @@
 
     <scm>
         <connection>scm:git:git@moneybender.com:projects/cql_schema_versioning</connection>
-        <tag>cql-schema-versioning-1.3</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <profiles>
