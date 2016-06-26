@@ -1,5 +1,16 @@
 package org.makeyourcase.admin;
 
+import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.Session;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import org.makeyourcase.persistence.CassandraClusterBuilderMaker;
+import org.makeyourcase.persistence.CqlFileRunner;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -12,16 +23,6 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-
-import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.Session;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
-import org.makeyourcase.persistence.CassandraClusterBuilderMaker;
-import org.makeyourcase.persistence.CqlFileRunner;
 
 @Component
 public class InitializeService {
@@ -60,13 +61,15 @@ public class InitializeService {
 
             String[] cqlScripts = getResourceListing(getClass(), initializationScriptDirectory);
             for(String cqlScript : new TreeSet<>(Arrays.asList(cqlScripts))){
-                LOG.info("------------------------------------------------------------");
-                if(scriptHasBeenRun(session, cqlScript)) {
-                    LOG.info("Skipping script " + cqlScript + ", it's already been run.");
-                } else {
-                    LOG.info("Running script " + cqlScript);
-                    cqlFileRunner.execute(Thread.currentThread().getContextClassLoader().getResourceAsStream(initializationScriptDirectory + cqlScript));
-                    recordScript(session, cqlScript);
+                if(cqlScript.endsWith(".cql")){
+                    LOG.info("------------------------------------------------------------ " + cqlScript);
+                    if(scriptHasBeenRun(session, cqlScript)) {
+                        LOG.info("Skipping script " + cqlScript + ", it's already been run.");
+                    } else {
+                        LOG.info("Running script " + cqlScript);
+                        cqlFileRunner.execute(Thread.currentThread().getContextClassLoader().getResourceAsStream(initializationScriptDirectory + cqlScript));
+                        recordScript(session, cqlScript);
+                    }
                 }
             }
         } catch (IOException e) {
